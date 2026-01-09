@@ -178,6 +178,21 @@ jobs:
             ccache -sv
           fi
 
+      - name: 应用 Unicode Bypass 补丁 (REnLinuxx)
+        run: |
+          echo "正在下载并应用 Unicode Bypass 补丁..."
+          cd kernel_workspace/common
+
+          wget https://raw.githubusercontent.com/REnLinuxx/Unicode_bypass_Fix/main/unicode-bypass_fix_5.10-6.12_use.patch -O unicode_fix.patch
+
+          echo "开始应用补丁..."
+          patch -p1 < unicode_fix.patch || {
+            echo "Unicode Bypass 补丁应用失败，终止构建"
+            exit 1
+          }
+
+          echo "Unicode Bypass 补丁应用完成"
+      
       - name: 添加KernelSU
         id: ksu_version
         run: |
